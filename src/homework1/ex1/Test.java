@@ -1,6 +1,6 @@
 package homework1.ex1;
 
-public class Main {
+public class Test {
     private static void playWithCat(Cat cat) {
         System.out.println(cat.getName() + " say: " + cat.say());
     }
