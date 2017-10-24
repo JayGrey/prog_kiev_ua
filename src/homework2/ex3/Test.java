@@ -15,6 +15,10 @@ public class Test {
 
         System.out.println("test Square class ... "
                 + (testSquare() ? "OK" : "FAIL"));
+
+        System.out.println("test Circle class ... "
+                + (testCircle() ? "OK" : "FAIL"));
+
     }
 
 
@@ -61,6 +65,25 @@ public class Test {
 
         boolean test2 = checkEquals(s.getPerimetr(), EXPECTED_PERIMETER, DELTA)
                 && checkEquals(s.getArea(), EXPECTED_AREA, DELTA);
+
+        return test1 && test2;
+    }
+
+    private static boolean testCircle() {
+        double EXPECTED_PERIMETER = 31.42;
+        double EXPECTED_AREA = 78.54;
+
+        // Проверка для положительной плоскости
+        Circle c = new Circle(new Point(0, 0), new Point(5, 0));
+
+        boolean test1 = checkEquals(c.getPerimetr(), EXPECTED_PERIMETER, DELTA)
+                && checkEquals(c.getArea(), EXPECTED_AREA, DELTA);
+
+        // Проверка для отрицательной плоскости
+        c = new Circle(new Point(-1, 0), new Point(-6, 0));
+
+        boolean test2 = checkEquals(c.getPerimetr(), EXPECTED_PERIMETER, DELTA)
+                && checkEquals(c.getArea(), EXPECTED_AREA, DELTA);
 
         return test1 && test2;
     }
