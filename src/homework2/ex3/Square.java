@@ -30,4 +30,10 @@ public class Square extends Shape {
         return sqrt((p - a.length(b)) * (p - b.length(c)) * (p - c.length(d))
                 * (p - d.length(a)));
     }
+
+    @Override
+    public String toString() {
+        return String.format("Square [a=%.02f, b=%.02f, c=%.02f, d=%.02f]",
+                a.length(b), b.length(c), c.length(d), d.length(a));
+    }
 }

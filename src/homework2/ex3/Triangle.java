@@ -26,4 +26,10 @@ public class Triangle extends Shape {
         return Math.sqrt(p * (p - a.length(b)) * (p - b.length(c)) *
                 (p - c.length(a)));
     }
+
+    @Override
+    public String toString() {
+        return String.format("Triangle [a=%.02f, b=%.02f, c=%.02f]",
+                a.length(b), b.length(c), c.length(a));
+    }
 }

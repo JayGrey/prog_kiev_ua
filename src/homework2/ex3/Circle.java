@@ -22,4 +22,10 @@ public class Circle extends Shape {
     public double getArea() {
         return Math.PI * radius * radius;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Circle [center=(%.02f, %.02f), r=%.02f]",
+                center.x, center.y, radius);
+    }
 }
