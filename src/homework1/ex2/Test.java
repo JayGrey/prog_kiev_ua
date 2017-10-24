@@ -7,7 +7,7 @@ public class Test {
                 new Triangle(1, 1, 1), new Triangle(0, 0, 0)};
 
         for (Triangle t : triangles) {
-            System.out.format("%s has square %.02f%n", t, t.square());
+            System.out.format("%s has area %.02f%n", t, t.area());
         }
     }
 }

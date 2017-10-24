@@ -11,7 +11,7 @@ public class Triangle {
         this.c = c;
     }
 
-    public double square() {
+    public double area() {
         // формула Герона
         double p = perimeter() / 2;
         return Math.sqrt(p * (p - a) * (p - b) * (p - c));
