@@ -3,8 +3,6 @@ package homework2.ex3;
 import homework2.ex1.Shape;
 import homework2.ex2.Point;
 
-import static java.lang.Math.abs;
-
 
 public class Triangle extends Shape {
     private Point a;
@@ -25,7 +23,7 @@ public class Triangle extends Shape {
     @Override
     public double getArea() {
         double p = getPerimetr() / 2;
-        return Math.sqrt(p * (p - abs(a.length(b))) * (p - abs(b.length(c))) *
-                (p - abs(c.length(a))));
+        return Math.sqrt(p * (p - a.length(b)) * (p - b.length(c)) *
+                (p - c.length(a)));
     }
 }
