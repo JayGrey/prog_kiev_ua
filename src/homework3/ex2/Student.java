@@ -8,6 +8,23 @@ public class Student extends Human {
         super(firstName, middleName, lastName, age, sex);
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other != null && other instanceof Student) {
+            Student s = (Student) other;
+            return s.firstName.equals(firstName)
+                    && s.middleName.equals(middleName)
+                    && s.lastName.equals(lastName)
+                    && s.age == age
+                    && s.sex == sex;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Student " + super.toString();
