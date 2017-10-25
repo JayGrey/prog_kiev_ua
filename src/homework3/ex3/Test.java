@@ -27,7 +27,6 @@ public class Test {
             System.out.println("OK");
         }
 
-
         // test delete student by object
         Student student = getRandomMaleStudent();
         group = new Group();

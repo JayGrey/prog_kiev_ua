@@ -27,9 +27,16 @@ public class Group {
         if (student == null) {
             throw new IllegalArgumentException("argument is null");
         }
-        for (int i = 0; i < students.length; i++) {
-            if (students[i] != null && students[i].equals(student)) {
-                students[i] = null;
+        for (int i = 0; i < currentPosition; i++) {
+            if (students[i].equals(student)) {
+                // копируем хвост массива на место удаляемого элемента
+                if (i != (currentPosition - 1)) {
+                    System.arraycopy(students, i + 1, students, i,
+                            currentPosition - i);
+                }
+                currentPosition -= 1;
+                students[currentPosition] = null;
+                break;
             }
         }
     }
@@ -40,9 +47,9 @@ public class Group {
         }
 
         Student result = null;
-        for (Student student : students) {
-            if (student != null && student.getLastName().equals(lastName)) {
-                result = student;
+        for (int i=0; i < currentPosition; i++) {
+            if (students[i].getLastName().equals(lastName)) {
+                result = students[i];
                 break;
             }
         }
@@ -50,7 +57,7 @@ public class Group {
     }
 
     private Student[] sortStudentsByLastName() {
-        Student[] result = new Student[getNumberOfStudents()];
+        Student[] result = new Student[currentPosition];
         int index = 0;
         for (Student student : students) {
             if (student != null) {
@@ -60,7 +67,8 @@ public class Group {
 
         for (int i = 0; i < result.length; i++) {
             for (int j = i + 1; j < result.length; j++) {
-                if (result[i].getLastName().compareTo(result[j].getLastName()) > 0) {
+                if (result[i].getLastName()
+                        .compareTo(result[j].getLastName()) > 0) {
                     Student tmp = result[i];
                     result[i] = result[j];
                     result[j] = tmp;
@@ -72,19 +80,13 @@ public class Group {
     }
 
     public int getNumberOfStudents() {
-        int result = 0;
-        for (Student student : students) {
-            if (student != null) {
-                result += 1;
-            }
-        }
-        return result;
+        return currentPosition;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Group:").append(System.lineSeparator());
+        sb.append("Group consist of:").append(System.lineSeparator());
 
         for (Student s : sortStudentsByLastName()) {
             sb.append("student: ").append(s).append(System.lineSeparator());
