@@ -23,14 +23,6 @@ public class Group {
         }
     }
 
-    public void deleteStudent(int index) {
-        try {
-            students[index] = null;
-        } catch (IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("incorrect index " + index);
-        }
-    }
-
     public void deleteStudent(Student student) {
         if (student == null) {
             throw new IllegalArgumentException("argument is null");

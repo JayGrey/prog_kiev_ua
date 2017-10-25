@@ -8,12 +8,10 @@ public class Test {
     public static void main(String[] args) {
 
         // test overfill
-        Group group = new Group();
+        System.out.print("test overfill group - ");
+        Group group = fillGroup(new Group(), 10);
         try {
-            System.out.print("test overfill group - ");
-            for (int i = 0; i < 20; i++) {
-                group.addStudent(getRandomMaleStudent());
-            }
+            group.addStudent(getRandomFemaleStudent());
             System.out.println("FAIL");
         } catch (GroupFullException e) {
             System.out.println("OK");
@@ -29,32 +27,6 @@ public class Test {
             System.out.println("OK");
         }
 
-        // test delete student by index
-        group = fillGroup(new Group(), 10);
-        group.deleteStudent(5);
-
-        System.out.println("test delete student -  "
-                + (group.getNumberOfStudents() == 9 ? "OK" : "FAIL"));
-
-        // test delete student by index, index < 0
-        group = fillGroup(new Group(), 10);
-        System.out.print("test delete student, (index < 0) - ");
-        try {
-            group.deleteStudent(-1);
-            System.out.println("FAIL");
-        } catch (IllegalArgumentException e) {
-            System.out.println("OK");
-        }
-
-        // test delete student by index, index > max capacity
-        group = fillGroup(new Group(), 10);
-        System.out.print("test delete student, (index > max) - ");
-        try {
-            group.deleteStudent(20);
-            System.out.println("FAIL");
-        } catch (IllegalArgumentException e) {
-            System.out.println("OK");
-        }
 
         // test delete student by object
         Student student = getRandomMaleStudent();
@@ -65,7 +37,6 @@ public class Test {
 
         System.out.println("test delete student by object - "
                 + (group.getNumberOfStudents() == 1 ? "OK" : "FAIL"));
-
 
         // test delete student by object, null argument
         group = new Group();
