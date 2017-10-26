@@ -3,6 +3,7 @@ package homework3.ex3;
 import homework3.ex2.Student;
 
 import javax.swing.*;
+import java.util.Arrays;
 
 public class Group {
     private static final int MAX_CAPACITY = 10;
@@ -96,22 +97,10 @@ public class Group {
 
     private Student[] sortStudentsByLastName() {
         Student[] result = new Student[currentPosition];
-        int index = 0;
-        for (Student student : students) {
-            if (student != null) {
-                result[index++] = student;
-            }
-        }
 
-        for (int i = 0; i < result.length; i++) {
-            for (int j = i + 1; j < result.length; j++) {
-                if (result[i].getLastName()
-                        .compareTo(result[j].getLastName()) > 0) {
-                    Student tmp = result[i];
-                    result[i] = result[j];
-                    result[j] = tmp;
-                }
-            }
+        if (currentPosition > 0) {
+            System.arraycopy(students, 0, result, 0, currentPosition);
+            Arrays.sort(result);
         }
 
         return result;
@@ -127,7 +116,7 @@ public class Group {
         sb.append("Group consist of:").append(System.lineSeparator());
 
         for (Student s : sortStudentsByLastName()) {
-            sb.append("student: ").append(s).append(System.lineSeparator());
+            sb.append(s).append(System.lineSeparator());
         }
         return sb.toString();
     }

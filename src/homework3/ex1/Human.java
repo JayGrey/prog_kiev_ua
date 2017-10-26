@@ -19,6 +19,26 @@ public class Human {
     protected Human() {
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public boolean isSex() {
+        return sex;
+    }
+
     @Override
     public String toString() {
         return String.format("[%s %s %s, age= %d, sex=%s]", lastName,

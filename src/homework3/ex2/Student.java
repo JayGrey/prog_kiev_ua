@@ -2,7 +2,7 @@ package homework3.ex2;
 
 import homework3.ex1.Human;
 
-public class Student extends Human {
+public class Student extends Human implements Comparable {
     public Student(String firstName, String middleName, String lastName,
                    int age, boolean sex) {
 
@@ -26,10 +26,6 @@ public class Student extends Human {
         this.sex = sex;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other != null && other instanceof Student) {
@@ -46,5 +42,11 @@ public class Student extends Human {
     @Override
     public String toString() {
         return "Student " + super.toString();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Student other = (Student) o;
+        return lastName.compareToIgnoreCase(other.lastName);
     }
 }
