@@ -1,84 +1,94 @@
 package homework3.ex3;
 
 import homework3.ex2.Student;
+import org.junit.Test;
 
 import java.util.Random;
 
-public class Test {
-    public static void main(String[] args) {
+import static org.junit.Assert.*;
 
-        // test overfill
-        System.out.print("test overfill group - ");
+public class TestHW3 {
+
+    @Test
+    public void testOverfill() {
         Group group = fillGroup(new Group(), 10);
-        try {
-            group.addStudent(getRandomFemaleStudent());
-            System.out.println("FAIL");
-        } catch (GroupFullException e) {
-            System.out.println("OK");
-        }
+        assertEquals(10, group.getNumberOfStudents());
+    }
 
-        // test add null value
-        System.out.print("test add null value - ");
-        group = new Group();
+    @Test
+    public void testAddNullValue() {
+        Group group = new Group();
         try {
             group.addStudent(null);
-            System.out.println("FAIL");
+            fail();
         } catch (IllegalArgumentException e) {
-            System.out.println("OK");
+            // all OK
         }
+    }
 
-        // test delete student by object
+    @Test
+    public void testDeleteStudentByObject() {
         Student student = getRandomMaleStudent();
-        group = new Group();
+        Group group = new Group();
+
         group.addStudent(getRandomMaleStudent());
         group.addStudent(student);
+        assertEquals(2, group.getNumberOfStudents());
+
         group.deleteStudent(student);
+        assertEquals(1, group.getNumberOfStudents());
+    }
 
-        System.out.println("test delete student by object - "
-                + (group.getNumberOfStudents() == 1 ? "OK" : "FAIL"));
-
-        // test delete student by object, null argument
-        group = new Group();
+    @Test
+    public void testDeleteStudentByObjectNullArgument() {
+        Group group = new Group();
         group.addStudent(getRandomMaleStudent());
-        System.out.print("test delete student by object, null argument - ");
         try {
             group.addStudent(null);
-            System.out.println("FAIL");
+            fail();
         } catch (IllegalArgumentException e) {
-            System.out.println("OK");
+            // all OK
         }
+    }
 
-        // find student
-        group = new Group();
-        student = getRandomMaleStudent();
+    @Test
+    public void testFindStudent() {
+        Group group = new Group();
+        Student student = getRandomMaleStudent();
         group.addStudent(getRandomFemaleStudent());
         group.addStudent(getRandomFemaleStudent());
         group.addStudent(student);
-        Student student1 = group.findStudentByLastName(student.getLastName());
-        System.out.println("test find student by lastName - "
-                + (student.equals(student1) ? "OK" : "FAIL"));
 
-        // find student, null argument
-        group = new Group();
+        assertEquals(student,
+                group.findStudentByLastName(student.getLastName()));
+    }
+
+    @Test
+    public void testFindStudentNullArgument() {
+        Group group = new Group();
         group.addStudent(getRandomMaleStudent());
-        System.out.print("test find student by lastName, null argument - ");
+
         try {
             group.findStudentByLastName(null);
-            System.out.println("FAIL");
+            fail();
         } catch (IllegalArgumentException e) {
-            System.out.println("OK");
+            // All OK
         }
+    }
 
-        // find student, non existing lastName
-        group = fillGroup(new Group(), 9);
-        student = group.findStudentByLastName("");
-        System.out.println("test find student, non existing lastName - "
-                + (student == null ? "OK" : "FAIL"));
+    @Test
+    public void testFindStudentNonExistingLastName() {
+        Group group = fillGroup(new Group(), 9);
 
-        // display group
-        group = fillGroup(new Group(), 9);
-        System.out.println(group);
+        assertNull(group.findStudentByLastName(""));
+    }
 
+    @Test
+    public void testDisplay() {
+        Group group = fillGroup(new Group(), 9);
+        String output = group.toString();
+
+        assertTrue(output.startsWith("Group consist of"));
     }
 
     private static Group fillGroup(Group group, int quantity) {
