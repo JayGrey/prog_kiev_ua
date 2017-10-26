@@ -2,6 +2,8 @@ package homework3.ex3;
 
 import homework3.ex2.Student;
 
+import javax.swing.*;
+
 public class Group {
     private static final int MAX_CAPACITY = 10;
 
@@ -10,6 +12,42 @@ public class Group {
 
     public Group() {
         students = new Student[MAX_CAPACITY];
+    }
+
+    // interactive
+    public void addStudent() {
+        while (true) {
+            try {
+                String lastName = JOptionPane.showInputDialog(null, "LastName:",
+                        "Add student", JOptionPane.PLAIN_MESSAGE);
+
+                String firstName = JOptionPane.showInputDialog(null,
+                        "FirstName:", "Add student", JOptionPane.PLAIN_MESSAGE);
+
+                String middleName = JOptionPane.showInputDialog(null,
+                        "MiddleName:", "Add student",
+                        JOptionPane.PLAIN_MESSAGE);
+
+                int age = Integer.valueOf(JOptionPane.showInputDialog(null,
+                        "Age:", "Add student", JOptionPane.PLAIN_MESSAGE));
+
+                String sex = (String) JOptionPane.showInputDialog(null, "Sex:",
+                        "Add student", JOptionPane.PLAIN_MESSAGE, null,
+                        new String[]{"Male", "Female"}, "Male");
+
+                addStudent(new Student(firstName, middleName, lastName, age,
+                        sex.equals("Male")));
+                break;
+            } catch (IllegalArgumentException | NullPointerException e) {
+                int answer = JOptionPane.showConfirmDialog(null,
+                        "Error adding student to group, try again ?", "Message",
+                        JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.NO_OPTION) {
+                    break;
+                }
+            }
+        }
+
     }
 
     public void addStudent(Student student) {
@@ -47,7 +85,7 @@ public class Group {
         }
 
         Student result = null;
-        for (int i=0; i < currentPosition; i++) {
+        for (int i = 0; i < currentPosition; i++) {
             if (students[i].getLastName().equals(lastName)) {
                 result = students[i];
                 break;
