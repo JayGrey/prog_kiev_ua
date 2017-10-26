@@ -6,6 +6,15 @@ import javax.swing.*;
 import java.util.Arrays;
 
 public class Group {
+    public static final int SORT_BY_LASTNAME = 0;
+    public static final int SORT_BY_FIRSTNAME = 1;
+    public static final int SORT_BY_MIDDLENAME = 2;
+    public static final int SORT_BY_AGE = 3;
+    public static final int SORT_BY_SEX = 4;
+
+    public static final int ACSENDING_ORDER = 0;
+    public static final int DESCENDING_ORDER = 1;
+
     private static final int MAX_CAPACITY = 10;
 
     private Student[] students;
@@ -110,6 +119,16 @@ public class Group {
         return currentPosition;
     }
 
+    public Student[] getStudents() {
+        Student[] result = new Student[currentPosition];
+
+        if (currentPosition > 0) {
+            System.arraycopy(students, 0, result, 0, currentPosition);
+        }
+
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -122,4 +141,8 @@ public class Group {
     }
 
 
+    public void sortStudentsBy(int sortingField, int sortingOrder) {
+        Arrays.sort(students, 0, currentPosition,
+                new StudentComparator(sortingField, sortingOrder));
+    }
 }
