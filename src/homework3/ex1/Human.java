@@ -15,7 +15,10 @@ public class Human {
         this.middleName = middleName;
         this.lastName = lastName;
     }
-    
+
+    protected Human() {
+    }
+
     @Override
     public String toString() {
         return String.format("[%s %s %s, age= %d, sex=%s]", lastName,

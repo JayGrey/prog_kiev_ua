@@ -5,7 +5,25 @@ import homework3.ex1.Human;
 public class Student extends Human {
     public Student(String firstName, String middleName, String lastName,
                    int age, boolean sex) {
-        super(firstName, middleName, lastName, age, sex);
+
+        if (firstName == null || middleName == null || lastName == null) {
+            throw new IllegalArgumentException("argument is null");
+        }
+
+        if (firstName.length() == 0 || middleName.length() == 0
+                || lastName.length() == 0) {
+            throw new IllegalArgumentException("String argument is empty");
+        }
+
+        if (age <= 0) {
+            throw new IllegalArgumentException("age < 0");
+        }
+
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.age = age;
+        this.sex = sex;
     }
 
     public String getLastName() {
