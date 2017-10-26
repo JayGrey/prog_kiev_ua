@@ -1,6 +1,7 @@
-package homework3.ex3;
+package homework3;
 
 import homework3.ex2.Student;
+import homework3.ex3.Group;
 import org.junit.Test;
 
 import java.util.Random;

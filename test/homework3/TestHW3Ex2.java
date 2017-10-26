@@ -1,5 +1,6 @@
-package homework3.ex2;
+package homework3;
 
+import homework3.ex2.Student;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;

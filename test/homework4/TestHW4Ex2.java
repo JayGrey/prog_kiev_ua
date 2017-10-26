@@ -1,4 +1,4 @@
-package homework4.ex2;
+package homework4;
 
 import homework3.ex2.Student;
 import homework3.ex3.Group;
