@@ -5,7 +5,7 @@ import homework3.ex2.Student;
 import javax.swing.*;
 import java.util.Arrays;
 
-public class Group {
+public class Group implements Voenkom {
     public static final int SORT_BY_LASTNAME = 0;
     public static final int SORT_BY_FIRSTNAME = 1;
     public static final int SORT_BY_MIDDLENAME = 2;
@@ -144,5 +144,25 @@ public class Group {
     public void sortStudentsBy(int sortingField, int sortingOrder) {
         Arrays.sort(students, 0, currentPosition,
                 new StudentComparator(sortingField, sortingOrder));
+    }
+
+    @Override
+    public Student[] getConscripts() {
+        int size = 0;
+        for (int i = 0; i < currentPosition; i++) {
+            if (students[i].isSex() && students[i].getAge() > 18) {
+                size += 1;
+            }
+        }
+
+        int index = 0;
+        Student[] conscripts = new Student[size];
+        for (int i = 0; i < currentPosition; i++) {
+            if (students[i].isSex() && students[i].getAge() > 18) {
+                conscripts[index++] = students[i];
+            }
+        }
+
+        return conscripts;
     }
 }
