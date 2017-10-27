@@ -152,8 +152,44 @@ public class Group implements Voenkom {
 
 
     public void sortStudentsBy(SortField field, SortOrder order) {
-        Arrays.sort(students, 0, currentPosition,
-                new StudentComparator(field, order));
+        if (field == null || order == null) {
+            throw new IllegalArgumentException();
+        }
+
+        switch (field) {
+            case LASTNAME: {
+                Arrays.sort(students, 0, currentPosition,
+                        (a, b) -> a.getLastName()
+                                .compareToIgnoreCase(b.getLastName())
+                                * order.getOrder());
+                break;
+            }
+            case FIRSTNAME: {
+                Arrays.sort(students, 0, currentPosition,
+                        (a, b) -> a.getFirstName()
+                                .compareToIgnoreCase(b.getFirstName())
+                                * order.getOrder());
+                break;
+            }
+            case MIDDLENAME: {
+                Arrays.sort(students, 0, currentPosition,
+                        (a, b) -> a.getMiddleName()
+                                .compareToIgnoreCase(b.getMiddleName())
+                                * order.getOrder());
+                break;
+            }
+            case AGE: {
+                Arrays.sort(students, 0, currentPosition,
+                        (a, b) -> (a.getAge() - b.getAge()) * order.getOrder());
+                break;
+            }
+            case SEX: {
+                Arrays.sort(students, 0, currentPosition,
+                        (a, b) -> ((!a.isSex() ? 0 : 1) - (!b.isSex() ? 0 : 1))
+                                * order.getOrder());
+                break;
+            }
+        }
     }
 
     @Override

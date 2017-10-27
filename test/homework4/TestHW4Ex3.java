@@ -2,11 +2,9 @@ package homework4;
 
 import homework3.ex2.Student;
 import homework3.ex3.Group;
-import homework3.ex3.StudentComparator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class TestHW4Ex3 {
     private Student[] testStudents = {
@@ -29,16 +27,6 @@ public class TestHW4Ex3 {
         assertEquals(2, students.length);
         assertEquals(testStudents[0], students[0]);
         assertEquals(testStudents[1], students[1]);
-    }
-
-    @Test
-    public void testEnumNull() {
-        try {
-            new StudentComparator(null, null);
-            fail();
-        } catch (IllegalArgumentException e) {
-            // OK
-        }
     }
 
     @Test
