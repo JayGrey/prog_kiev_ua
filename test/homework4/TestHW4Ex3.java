@@ -37,7 +37,8 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_LASTNAME, Group.ACSENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.LASTNAME,
+                Group.SortOrder.ASCENDING);
 
         Student[] students = group.getStudents();
 
@@ -55,7 +56,8 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_LASTNAME, Group.DESCENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.LASTNAME,
+                Group.SortOrder.DESCENDING);
 
         Student[] students = group.getStudents();
         assertEquals(testStudents[0], students[3]);
@@ -72,7 +74,8 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_FIRSTNAME, Group.ACSENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.FIRSTNAME,
+                Group.SortOrder.ASCENDING);
 
         Student[] students = group.getStudents();
 
@@ -90,7 +93,8 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_FIRSTNAME, Group.DESCENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.FIRSTNAME,
+                Group.SortOrder.DESCENDING);
 
         Student[] students = group.getStudents();
         assertEquals(testStudents[0], students[3]);
@@ -107,7 +111,8 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_MIDDLENAME, Group.ACSENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.MIDDLENAME,
+                Group.SortOrder.ASCENDING);
 
         Student[] students = group.getStudents();
 
@@ -125,7 +130,8 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_MIDDLENAME, Group.DESCENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.MIDDLENAME,
+                Group.SortOrder.DESCENDING);
 
         Student[] students = group.getStudents();
 
@@ -144,7 +150,7 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_AGE, Group.ACSENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.AGE, Group.SortOrder.ASCENDING);
 
         Student[] students = group.getStudents();
 
@@ -162,7 +168,7 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_AGE, Group.DESCENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.AGE, Group.SortOrder.DESCENDING);
 
         Student[] students = group.getStudents();
 
@@ -178,7 +184,7 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[0]);
         group.addStudent(testStudents[2]);
 
-        group.sortStudentsBy(Group.SORT_BY_SEX, Group.ACSENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.SEX, Group.SortOrder.ASCENDING);
         Student[] students = group.getStudents();
 
         assertEquals(testStudents[2], students[0]);
@@ -191,7 +197,7 @@ public class TestHW4Ex3 {
         group.addStudent(testStudents[2]);
         group.addStudent(testStudents[0]);
 
-        group.sortStudentsBy(Group.SORT_BY_SEX, Group.DESCENDING_ORDER);
+        group.sortStudentsBy(Group.SortField.SEX, Group.SortOrder.DESCENDING);
         Student[] students = group.getStudents();
 
         assertEquals(testStudents[0], students[0]);

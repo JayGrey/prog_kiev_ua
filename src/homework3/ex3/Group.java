@@ -6,14 +6,24 @@ import javax.swing.*;
 import java.util.Arrays;
 
 public class Group implements Voenkom {
-    public static final int SORT_BY_LASTNAME = 0;
-    public static final int SORT_BY_FIRSTNAME = 1;
-    public static final int SORT_BY_MIDDLENAME = 2;
-    public static final int SORT_BY_AGE = 3;
-    public static final int SORT_BY_SEX = 4;
 
-    public static final int ACSENDING_ORDER = 0;
-    public static final int DESCENDING_ORDER = 1;
+    public enum SortField {
+        LASTNAME, FIRSTNAME, MIDDLENAME, AGE, SEX
+    }
+
+    public enum SortOrder {
+        ASCENDING(1), DESCENDING(-1);
+
+        private final int order;
+
+        SortOrder(int order) {
+            this.order = order;
+        }
+
+        public int getOrder() {
+            return order;
+        }
+    }
 
     private static final int MAX_CAPACITY = 10;
 
@@ -141,9 +151,9 @@ public class Group implements Voenkom {
     }
 
 
-    public void sortStudentsBy(int sortingField, int sortingOrder) {
+    public void sortStudentsBy(SortField field, SortOrder order) {
         Arrays.sort(students, 0, currentPosition,
-                new StudentComparator(sortingField, sortingOrder));
+                new StudentComparator(field, order));
     }
 
     @Override
