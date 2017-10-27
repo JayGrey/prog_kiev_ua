@@ -9,7 +9,9 @@ public class StudentComparator implements Comparator<Student> {
     private Group.SortOrder order;
 
     public StudentComparator(Group.SortField field, Group.SortOrder order) {
-
+        if(field == null || order == null) {
+            throw new IllegalArgumentException();
+        }
         this.field = field;
         this.order = order;
     }
