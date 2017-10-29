@@ -1,7 +1,7 @@
 package homework5;
 
+import homework5.ex2.Container;
 import homework5.ex2.SimilarWords;
-import homework5.ex2.StringContainer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -23,8 +23,8 @@ public class TestHW5Ex2 {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void testSCAdd() {
-        StringContainer sc = new StringContainer();
+    public void testCAdd() {
+        Container<String> sc = new Container<>(String.class);
         assertEquals(0, sc.size());
 
         sc.add("a");
@@ -35,16 +35,16 @@ public class TestHW5Ex2 {
     }
 
     @Test
-    public void testSCAddNull() {
+    public void testCAddNull() {
         thrown.expect(IllegalArgumentException.class);
-        StringContainer sc = new StringContainer();
+        Container<String> sc = new Container<>(String.class);
         sc.add("a");
         sc.add(null);
     }
 
     @Test
-    public void testSCContains() {
-        StringContainer sc = new StringContainer();
+    public void testCContains() {
+        Container<String> sc = new Container<>(String.class);
         sc.add("a");
         sc.add("b");
 
@@ -53,8 +53,8 @@ public class TestHW5Ex2 {
     }
 
     @Test
-    public void testSCResize() {
-        StringContainer sc = new StringContainer();
+    public void testCResize() {
+        Container<String> sc = new Container<>(String.class);
         for (int i = 0; i < 15; i++) {
             sc.add("" + ('a' + i));
         }
@@ -62,8 +62,8 @@ public class TestHW5Ex2 {
     }
 
     @Test
-    public void testSCIterator() {
-        StringContainer sc = new StringContainer();
+    public void testCIterator() {
+        Container<String> sc = new Container<>(String.class);
         for (int i = 0; i < 15; i++) {
             sc.add("" + ('a' + i));
         }
@@ -100,7 +100,7 @@ public class TestHW5Ex2 {
         PrintWriter writer = new PrintWriter(new FileWriter(file));
         writer.format("a b c %n d e f");
         writer.close();
-        StringContainer container = SimilarWords.findWords(
+        Container<String> container = SimilarWords.findWords(
                 file.getCanonicalPath(), file.getCanonicalPath());
 
         assertEquals(6, container.size());
@@ -119,7 +119,7 @@ public class TestHW5Ex2 {
         writer.format("z b Z %n Z Z f%n");
         writer.close();
 
-        StringContainer container = SimilarWords.findWords(
+        Container<String> container = SimilarWords.findWords(
                 file1.getCanonicalPath(), file2.getCanonicalPath());
 
         assertEquals(2, container.size());
@@ -128,7 +128,7 @@ public class TestHW5Ex2 {
     @Test
     public void testWriteResult() throws IOException {
         File file = tempFolder.newFile();
-        StringContainer sc = new StringContainer();
+        Container<String> sc = new Container<>(String.class);
         sc.add("a");
         sc.add("b");
         sc.add("c");

@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class SimilarWords {
 
-    public static StringContainer findWords(String file1, String file2) {
+    public static Container<String> findWords(String file1, String file2) {
 
-        StringContainer wordsContainer1 = new StringContainer();
-        StringContainer wordsContainer2 = new StringContainer();
-        StringContainer result = new StringContainer();
+        Container<String> wordsContainer1 = new Container<>(String.class);
+        Container<String> wordsContainer2 = new Container<>(String.class);
+        Container<String> result = new Container<>(String.class);
 
         try (BufferedReader reader1 = new BufferedReader(new FileReader(file1));
              BufferedReader reader2 = new BufferedReader(new FileReader(file2))) {
@@ -39,7 +39,7 @@ public class SimilarWords {
         return result;
     }
 
-    public static void writeResult(StringContainer container, String filename) {
+    public static void writeResult(Container<String> container, String filename) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
             for (String s : container) {
                 writer.println(s);
