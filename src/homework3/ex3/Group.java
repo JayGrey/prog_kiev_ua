@@ -44,6 +44,10 @@ public class Group implements Voenkom {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // interactive
     public void addStudent() {
         while (true) {

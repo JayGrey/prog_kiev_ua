@@ -9,19 +9,7 @@ public class GroupController {
 
     public GroupController(GroupDAO groupDAO) {
         this.groupDAO = groupDAO;
-        group = new Group("test group");
-    }
-
-    public void add(Student student) {
-        group.addStudent(student);
-    }
-
-    public Student[] getAll() {
-        return group.getStudents();
-    }
-
-    public void delete(Student student) {
-        group.deleteStudent(student);
+        group = new Group();
     }
 
     public void save() {
@@ -31,4 +19,21 @@ public class GroupController {
     public void load(String groupName) {
         group = groupDAO.loadGroup(groupName);
     }
+
+    public void add(Student student) {
+        group.addStudent(student);
+    }
+
+    public Student[] getAllStudents() {
+        return group.getStudents();
+    }
+
+    public void setName(String name) {
+        group.setName(name);
+    }
+
+    public String getName() {
+        return group.getName();
+    }
+
 }

@@ -4,6 +4,7 @@ import homework3.ex2.Student;
 import homework3.ex3.Group;
 
 import java.io.*;
+import java.util.Iterator;
 
 public class GroupDAOImpl implements GroupDAO {
 
@@ -19,7 +20,8 @@ public class GroupDAOImpl implements GroupDAO {
             throw new IllegalArgumentException();
         }
 
-        try (PrintWriter writer = new PrintWriter(new FileOutputStream(filename))) {
+        try (PrintWriter writer = new PrintWriter(
+                new FileOutputStream(filename))) {
             writer.println('{');
             writer.format("\t\"name\": \"%s\",%n", group.getName());
 
@@ -54,6 +56,97 @@ public class GroupDAOImpl implements GroupDAO {
 
     @Override
     public Group loadGroup(String groupName) {
-        return null;
+        StringBuilder b = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(filename))) {
+            while (reader.ready()) {
+                b.append(reader.readLine().trim());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Group group = new Group();
+
+        Iterator<JParser.Element> iter = new JParser(b.toString()).iterator();
+        while (iter.hasNext()) {
+            JParser.Element e = iter.next();
+
+            if (e.type == JParser.Type.STRING && e.value.equals("name")) {
+                iter.next();
+                e = iter.next();
+                group.setName(e.value);
+                continue;
+            }
+
+            if (e.type == JParser.Type.STRING && e.value.equals("students")) {
+                iter.next();
+                e = iter.next();
+                if (e.type != JParser.Type.ARRAY_BEGIN) {
+                    throw new RuntimeException("error parsing");
+                }
+
+                while ((e = iter.next()).type != JParser.Type.ARRAY_END) {
+                    if (e.type == JParser.Type.OBJECT_BEGIN) {
+                        String firstname = "";
+                        String lastname = "";
+                        String middlename = "";
+                        int age = 0;
+                        boolean sex = false;
+
+                        while (true) {
+                            e = iter.next();
+                            if (e.type == JParser.Type.STRING
+                                    && e.value.equals("firstname")) {
+                                iter.next();
+                                e = iter.next();
+                                firstname = e.value;
+                                continue;
+                            }
+                            if (e.type == JParser.Type.STRING
+                                    && e.value.equals("lastname")) {
+                                iter.next();
+                                e = iter.next();
+                                lastname = e.value;
+                                continue;
+                            }
+                            if (e.type == JParser.Type.STRING
+                                    && e.value.equals("middlename")) {
+                                iter.next();
+                                e = iter.next();
+                                middlename = e.value;
+                                continue;
+                            }
+                            if (e.type == JParser.Type.STRING
+                                    && e.value.equals("age")) {
+                                iter.next();
+                                e = iter.next();
+                                age = Integer.valueOf(e.value);
+                                continue;
+                            }
+                            if (e.type == JParser.Type.STRING
+                                    && e.value.equals("sex")) {
+                                iter.next();
+                                e = iter.next();
+                                sex = e.value.equals("true");
+                                continue;
+                            }
+                            if (e.type == JParser.Type.OBJECT_END) {
+                                group.addStudent(new Student(firstname,
+                                        middlename, lastname, age, sex));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!group.getName().equals(groupName)) {
+            throw new LoadGroupException("group " + groupName + " not found");
+        }
+        return group;
     }
 }
+
