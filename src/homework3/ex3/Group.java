@@ -29,9 +29,19 @@ public class Group implements Voenkom {
 
     private Student[] students;
     private int currentPosition;
+    private String name;
 
     public Group() {
+        this("");
+    }
+
+    public Group(String name) {
         students = new Student[MAX_CAPACITY];
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     // interactive
