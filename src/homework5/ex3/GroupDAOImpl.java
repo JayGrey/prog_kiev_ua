@@ -26,35 +26,39 @@ public class GroupDAOImpl implements GroupDAO {
         try (PrintWriter writer = new PrintWriter(
                 new FileOutputStream(filename))) {
             writer.println('{');
-            writer.format("\t\"name\": \"%s\",%n", group.getName());
+            writeField(writer, "name", group.getName(), false);
 
-            writer.format("\t\"students\": [%n");
+            writer.println("\"students\": [");
             Student[] students = group.getStudents();
             for (int i = 0; i < students.length; i++) {
-                Student student = students[i];
-                writer.format("\t\t{%n");
-
-                writer.format("\t\t\t\"lastname\": \"%s\",%n",
-                        student.getLastName());
-
-                writer.format("\t\t\t\"firstname\": \"%s\",%n",
-                        student.getFirstName());
-
-                writer.format("\t\t\t\"middlename\": \"%s\",%n",
-                        student.getMiddleName());
-
-                writer.format("\t\t\t\"age\": %d,%n", student.getAge());
-
-                writer.format("\t\t\t\"sex\": %s%n", student.isSex());
-
-                writer.format("\t\t%s%n",
-                        (i == students.length - 1) ? "}" : "},");
+                Student s = students[i];
+                writer.println("{");
+                writeField(writer, "lastname", s.getLastName(), false);
+                writeField(writer, "firstname", s.getFirstName(), false);
+                writeField(writer, "middlename", s.getMiddleName(), false);
+                writeField(writer, "age", s.getAge(), false);
+                writeField(writer, "sex", s.isSex(), true);
+                writer.println((i == students.length - 1) ? "}" : "},");
             }
-            writer.format("\t]%n");
-            writer.println('}');
+            writer.println("]}");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void writeField(PrintWriter writer, String name, String value,
+                            boolean lastField) {
+        writer.format("\"%s\": \"%s\"%s%n", name, value, lastField ? "" : ",");
+    }
+
+    private void writeField(PrintWriter writer, String name, int value,
+                            boolean isLastField) {
+        writer.format("\"%s\": %d%s%n", name, value, isLastField ? "" : ",");
+    }
+
+    private void writeField(PrintWriter writer, String name, boolean value,
+                            boolean isLastField) {
+        writer.format("\"%s\": %s%s%n", name, value, isLastField ? "" : ",");
     }
 
     @Override
