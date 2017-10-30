@@ -119,38 +119,23 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     private Student getStudent(String fields) {
-        String firstname = "";
-        String lastname = "";
-        String middlename = "";
-        int age = 0;
-        boolean sex = false;
+        return new Student(
+                getField(fields, "firstname"),
+                getField(fields, "middlename"),
+                getField(fields, "lastname"),
+                Integer.valueOf(getField(fields, "age")),
+                getField(fields, "sex").equals("true")
+        );
+    }
 
+    private String getField(String fields, String fieldName) {
         for (String field : fields.split(",")) {
             String[] elements = field.split(":");
-            switch (elements[0].trim().replaceAll("\"", "")) {
-                case "lastname": {
-                    lastname = elements[1].trim().replaceAll("\"", "");
-                    break;
-                }
-                case "firstname": {
-                    firstname = elements[1].trim().replaceAll("\"", "");
-                    break;
-                }
-                case "middlename": {
-                    middlename = elements[1].trim().replaceAll("\"", "");
-                    break;
-                }
-                case "age": {
-                    age = Integer.valueOf(elements[1].trim());
-                    break;
-                }
-                case "sex": {
-                    sex = elements[1].trim().equals("true");
-                    break;
-                }
+            if (elements[0].trim().replace("\"", "").equals(fieldName)) {
+                return elements[1].trim().replace("\"", "");
             }
         }
-        return new Student(firstname, middlename, lastname, age, sex);
+        return "";
     }
 }
 
