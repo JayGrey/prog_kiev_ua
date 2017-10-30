@@ -4,7 +4,10 @@ import homework3.ex2.Student;
 import homework3.ex3.Group;
 
 import java.io.*;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GroupDAOImpl implements GroupDAO {
 
@@ -67,86 +70,87 @@ public class GroupDAOImpl implements GroupDAO {
             throw new RuntimeException(e);
         }
 
-        Group group = new Group();
+        String name = getGroupName(b);
+        Student[] students = getStudents(b);
 
-        Iterator<JParser.Element> iter = new JParser(b.toString()).iterator();
-        while (iter.hasNext()) {
-            JParser.Element e = iter.next();
-
-            if (e.type == JParser.Type.STRING && e.value.equals("name")) {
-                iter.next();
-                e = iter.next();
-                group.setName(e.value);
-                continue;
-            }
-
-            if (e.type == JParser.Type.STRING && e.value.equals("students")) {
-                iter.next();
-                e = iter.next();
-                if (e.type != JParser.Type.ARRAY_BEGIN) {
-                    throw new RuntimeException("error parsing");
-                }
-
-                while ((e = iter.next()).type != JParser.Type.ARRAY_END) {
-                    if (e.type == JParser.Type.OBJECT_BEGIN) {
-                        String firstname = "";
-                        String lastname = "";
-                        String middlename = "";
-                        int age = 0;
-                        boolean sex = false;
-
-                        while (true) {
-                            e = iter.next();
-                            if (e.type == JParser.Type.STRING
-                                    && e.value.equals("firstname")) {
-                                iter.next();
-                                e = iter.next();
-                                firstname = e.value;
-                                continue;
-                            }
-                            if (e.type == JParser.Type.STRING
-                                    && e.value.equals("lastname")) {
-                                iter.next();
-                                e = iter.next();
-                                lastname = e.value;
-                                continue;
-                            }
-                            if (e.type == JParser.Type.STRING
-                                    && e.value.equals("middlename")) {
-                                iter.next();
-                                e = iter.next();
-                                middlename = e.value;
-                                continue;
-                            }
-                            if (e.type == JParser.Type.STRING
-                                    && e.value.equals("age")) {
-                                iter.next();
-                                e = iter.next();
-                                age = Integer.valueOf(e.value);
-                                continue;
-                            }
-                            if (e.type == JParser.Type.STRING
-                                    && e.value.equals("sex")) {
-                                iter.next();
-                                e = iter.next();
-                                sex = e.value.equals("true");
-                                continue;
-                            }
-                            if (e.type == JParser.Type.OBJECT_END) {
-                                group.addStudent(new Student(firstname,
-                                        middlename, lastname, age, sex));
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!group.getName().equals(groupName)) {
+        if (!name.equals(groupName)) {
             throw new LoadGroupException("group " + groupName + " not found");
         }
+
+        Group group = new Group(name);
+        for (Student student : students) {
+            group.addStudent(student);
+        }
         return group;
+    }
+
+    private String getGroupName(StringBuilder b) {
+        String regex = "\"name\"\\s*:\\s*\"([^\"]*)\"\\s*,";
+        String result = "";
+        Pattern p = Pattern.compile(regex, Pattern.DOTALL);
+        Matcher matcher = p.matcher(b);
+        if (matcher.find()) {
+            result = matcher.group(1);
+        }
+        return result;
+    }
+
+    private Student[] getStudents(StringBuilder b) {
+        String regex = "\\\"students\\\"\\s*:\\s*\\[\\s*(.*)\\s*\\]";
+        String result = "";
+        List<Student> students = new ArrayList<>();
+
+        // get objects
+        Pattern p = Pattern.compile(regex, Pattern.DOTALL);
+        Matcher matcher = p.matcher(b);
+        if (matcher.find()) {
+            result = matcher.group(1);
+        }
+
+        // split them
+        regex = "\\{(.*?)\\}";
+        p = Pattern.compile(regex, Pattern.DOTALL);
+        matcher = p.matcher(result);
+        while (matcher.find()) {
+            students.add(getStudent(matcher.group(1)));
+        }
+
+        return students.toArray(new Student[0]);
+    }
+
+    private Student getStudent(String fields) {
+        String firstname = "";
+        String lastname = "";
+        String middlename = "";
+        int age = 0;
+        boolean sex = false;
+
+        for (String field : fields.split(",")) {
+            String[] elements = field.split(":");
+            switch (elements[0].trim().replaceAll("\"", "")) {
+                case "lastname": {
+                    lastname = elements[1].trim().replaceAll("\"", "");
+                    break;
+                }
+                case "firstname": {
+                    firstname = elements[1].trim().replaceAll("\"", "");
+                    break;
+                }
+                case "middlename": {
+                    middlename = elements[1].trim().replaceAll("\"", "");
+                    break;
+                }
+                case "age": {
+                    age = Integer.valueOf(elements[1].trim());
+                    break;
+                }
+                case "sex": {
+                    sex = elements[1].trim().equals("true");
+                    break;
+                }
+            }
+        }
+        return new Student(firstname, middlename, lastname, age, sex);
     }
 }
 
