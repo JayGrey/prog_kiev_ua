@@ -4,10 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class FileCopy {
+
+    private static final int NUMBER_OF_THREADS = 4;
+
+    private Queue<File> queue;
+    private File dirTo;
 
     private void checkArgs(String from, String to) {
         if (from == null || to == null) {
@@ -30,15 +36,18 @@ public class FileCopy {
 
         checkArgs(from, to);
 
-        File dirTo = new File(to);
+        dirTo = new File(to);
         File[] files = new File(from).listFiles(File::isFile);
 
         if (files != null && files.length > 0) {
-            List<Thread> workers = new ArrayList<>(files.length);
-            for (File file : files) {
-                Thread t = new Thread(new CopyWorker(file, dirTo));
-                t.start();
-                workers.add(t);
+            queue = new ArrayBlockingQueue<>(files.length, true,
+                    Arrays.asList(files));
+
+            Thread[] workers = new Thread[NUMBER_OF_THREADS];
+            for (int i = 0; i < NUMBER_OF_THREADS; i++) {
+                Thread thread = new Thread(new CopyWorker());
+                thread.start();
+                workers[i] = thread;
             }
             for (Thread worker : workers) {
                 try {
@@ -51,31 +60,28 @@ public class FileCopy {
     }
 
     private class CopyWorker implements Runnable {
-        private File file;
-        private File dirTo;
-
-        CopyWorker(File file, File dirTo) {
-            this.file = file;
-            this.dirTo = dirTo;
-        }
 
         @Override
         public void run() {
+            File file;
+            while ((file = queue.poll()) != null) {
+                copy(file);
+                System.out.println("file " + file.getName() + " copied");
+            }
+
+        }
+
+        private void copy(File in) {
             int BUFFER_SIZE = 1024 * 1024;
             byte[] buffer = new byte[BUFFER_SIZE];
-            try (FileInputStream fIn = new FileInputStream(file);
+            try (FileInputStream fIn = new FileInputStream(in);
                  FileOutputStream fOut = new FileOutputStream(
-                         new File(dirTo, file.getName()))) {
+                         new File(dirTo, in.getName()))) {
 
                 int read;
-                while (true) {
-                    read = fIn.read(buffer);
-                    if (read == -1) {
-                        break;
-                    }
+                while ((read = fIn.read(buffer)) != -1) {
                     fOut.write(buffer, 0, read);
                 }
-                System.out.println("file " + file.getName() + " copied");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
