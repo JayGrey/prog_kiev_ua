@@ -1,15 +1,18 @@
 package homework7.ex3;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.*;
 
 public class FileSearch {
-    private static void checkArgs(String path, String filename) {
+
+    private static final int NUMBER_OF_THREADS = 4;
+    private final String path;
+    private final String filename;
+    private final ExecutorService pool;
+
+    private void checkArgs(String path, String filename) {
         if (path == null || filename == null) {
             throw new IllegalArgumentException("argument is null");
         }
@@ -24,49 +27,58 @@ public class FileSearch {
         }
     }
 
-    public static String[] find(String path, String filename) {
+    public FileSearch(String path, String filename) {
         checkArgs(path, filename);
+        this.path = path;
+        this.filename = filename;
 
-        List<String> foundFiles = Collections.synchronizedList(
-                new ArrayList<>());
-
-        new ForkJoinPool().invoke(new FileFinder(path, filename, foundFiles));
-
-        return foundFiles.toArray(new String[0]);
+        pool = Executors.newCachedThreadPool();
     }
 
-    private static class FileFinder extends RecursiveAction {
+    public String[] find() {
 
+        FutureTask<List<String>> task = new FutureTask<>(new SearchWorker(path));
+        new Thread(task).start();
+
+        try {
+            return task.get().toArray(new String[0]);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private class SearchWorker implements Callable<List<String>> {
         private final String path;
-        private final String filename;
-        private final List<String> result;
 
-        public FileFinder(String path, String filename, List<String> result) {
+        public SearchWorker(String path) {
             this.path = path;
-            this.filename = filename;
-            this.result = result;
         }
 
         @Override
-        protected void compute() {
-            File[] nodes = new File(path).listFiles();
-            if (nodes == null) {
-                return;
-            }
-            try {
-                for (File node : nodes) {
-                    if (node.isDirectory()) {
+        public List<String> call() throws Exception {
+            List<Future<List<String>>> futures = new LinkedList<>();
+            List<String> resultList = new LinkedList<>();
 
-                        invokeAll(new FileFinder(node.getCanonicalPath(),
-                                filename, result));
-
-                    } else if (node.getName().equals(filename)) {
-                        result.add(node.getCanonicalPath());
+            File[] files = new File(path).listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        FutureTask<List<String>> task = new FutureTask<>(
+                                new SearchWorker(file.getCanonicalPath()));
+                        new Thread(task).start();
+                        futures.add(task);
+                    } else if (file.isFile() && file.getName().equals(filename)) {
+                        resultList.add(file.getCanonicalPath());
                     }
                 }
-            } catch (IOException e) {
-                throw new IllegalArgumentException(e);
+
+                for (Future<List<String>> future : futures) {
+                    resultList.addAll(future.get());
+                }
             }
+
+            return resultList;
         }
     }
 }

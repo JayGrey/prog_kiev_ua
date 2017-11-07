@@ -21,32 +21,32 @@ public class TestHW7Ex3 {
     @Test
     public void testPathNull() {
         thrown.expect(IllegalArgumentException.class);
-        FileSearch.find(null, "");
+        new FileSearch(null, "").find();
     }
 
     @Test
     public void testFilenameNull() {
         thrown.expect(IllegalArgumentException.class);
-        FileSearch.find(".", null);
+        new FileSearch(".", null).find();
     }
 
     @Test
     public void testFilenameEmpty() {
         thrown.expect(IllegalArgumentException.class);
-        FileSearch.find(".", "  ");
+        new FileSearch(".", "  ").find();
     }
 
     @Test
     public void testPathNotDir() {
         thrown.expect(IllegalArgumentException.class);
-        FileSearch.find(" ", "abc");
+        new FileSearch(" ", "abc").find();
     }
 
     @Test
     public void testEmptyResult() throws IOException {
 
-        String[] result = FileSearch.find(
-                tempFolder.getRoot().getCanonicalPath(), "abc");
+        String[] result = new FileSearch(
+                tempFolder.getRoot().getCanonicalPath(), "abc").find();
 
         assertEquals(0, result.length);
     }
@@ -56,8 +56,8 @@ public class TestHW7Ex3 {
 
         File file = tempFolder.newFile();
 
-        String[] result = FileSearch.find(
-                tempFolder.getRoot().getCanonicalPath(), file.getName());
+        String[] result = new FileSearch(
+                tempFolder.getRoot().getCanonicalPath(), file.getName()).find();
 
         assertEquals(1, result.length);
     }
@@ -77,10 +77,9 @@ public class TestHW7Ex3 {
         new File(nnFolder, file.getName()).createNewFile();
         new File(nnFolder, "unexpected.txt").createNewFile();
 
-        String[] result = FileSearch.find(
-                tempFolder.getRoot().getCanonicalPath(), file.getName());
+        String[] result = new FileSearch(
+                tempFolder.getRoot().getCanonicalPath(), file.getName()).find();
 
         assertEquals(3, result.length);
-
     }
 }
