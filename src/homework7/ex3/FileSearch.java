@@ -1,16 +1,16 @@
 package homework7.ex3;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
 
 public class FileSearch {
 
-    private static final int NUMBER_OF_THREADS = 4;
     private final String path;
     private final String filename;
-    private final ExecutorService pool;
+    private ExecutorService pool;
 
     private void checkArgs(String path, String filename) {
         if (path == null || filename == null) {
@@ -36,14 +36,14 @@ public class FileSearch {
     }
 
     public String[] find() {
-
-        FutureTask<List<String>> task = new FutureTask<>(new SearchWorker(path));
-        new Thread(task).start();
+        Future<List<String>> task = pool.submit(new SearchWorker(path));
 
         try {
             return task.get().toArray(new String[0]);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
+        } finally {
+            pool.shutdown();
         }
     }
 
@@ -56,7 +56,8 @@ public class FileSearch {
         }
 
         @Override
-        public List<String> call() throws Exception {
+        public List<String> call() throws IOException, ExecutionException,
+                InterruptedException {
             List<Future<List<String>>> futures = new LinkedList<>();
             List<String> resultList = new LinkedList<>();
 
@@ -64,11 +65,11 @@ public class FileSearch {
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
-                        FutureTask<List<String>> task = new FutureTask<>(
+                        Future<List<String>> task = pool.submit(
                                 new SearchWorker(file.getCanonicalPath()));
-                        new Thread(task).start();
                         futures.add(task);
-                    } else if (file.isFile() && file.getName().equals(filename)) {
+
+                    } else if (file.getName().equals(filename)) {
                         resultList.add(file.getCanonicalPath());
                     }
                 }
