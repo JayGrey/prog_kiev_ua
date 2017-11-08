@@ -10,11 +10,11 @@ public class Main {
             System.exit(1);
         }
 
-        String[] filenames = new FileSearch(args[0], args[1]).find();
+        String[] files = new FileSearch(args[0], args[1]).find();
 
-        if (filenames.length > 0) {
-            System.out.println("found files in following directories:");
-            for (String filename : filenames) {
+        if (files.length > 0) {
+            System.out.println("found file in following directories:");
+            for (String filename : files) {
                 System.out.println(filename);
             }
         } else {

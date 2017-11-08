@@ -2,6 +2,8 @@ package homework7.ex3;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -31,15 +33,14 @@ public class FileSearch {
         checkArgs(path, filename);
         this.path = path;
         this.filename = filename;
-
         pool = Executors.newCachedThreadPool();
     }
 
     public String[] find() {
-        Future<List<String>> task = pool.submit(new SearchWorker(path));
 
+        Future<List<String>> future = pool.submit(new SearchWorker(path));
         try {
-            return task.get().toArray(new String[0]);
+            return future.get().toArray(new String[0]);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         } finally {
@@ -47,36 +48,38 @@ public class FileSearch {
         }
     }
 
-
     private class SearchWorker implements Callable<List<String>> {
         private final String path;
 
-        public SearchWorker(String path) {
+        SearchWorker(String path) {
             this.path = path;
         }
 
         @Override
         public List<String> call() throws IOException, ExecutionException,
                 InterruptedException {
-            List<Future<List<String>>> futures = new LinkedList<>();
             List<String> resultList = new LinkedList<>();
+            List<Future<List<String>>> futures = new LinkedList<>();
 
             File[] files = new File(path).listFiles();
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
-                        Future<List<String>> task = pool.submit(
-                                new SearchWorker(file.getCanonicalPath()));
-                        futures.add(task);
+                        if (Files.isSymbolicLink(
+                                Paths.get(file.getAbsolutePath()))) {
+                            continue;
+                        }
+                        futures.add(pool.submit(new SearchWorker(
+                                file.getCanonicalPath())));
 
                     } else if (file.getName().equals(filename)) {
                         resultList.add(file.getCanonicalPath());
                     }
                 }
+            }
 
-                for (Future<List<String>> future : futures) {
-                    resultList.addAll(future.get());
-                }
+            for (Future<List<String>> future : futures) {
+                resultList.addAll(future.get());
             }
 
             return resultList;
