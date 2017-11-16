@@ -3,9 +3,11 @@ package homework3.ex3;
 import homework3.ex2.Student;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 
-public class Group implements Voenkom {
+public class Group implements Voenkom, Serializable {
 
     public enum SortField {
         LASTNAME, FIRSTNAME, MIDDLENAME, AGE, SEX
@@ -224,5 +226,18 @@ public class Group implements Voenkom {
         }
 
         return conscripts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return Objects.equals(name, group.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
