@@ -2,21 +2,18 @@ package homework8.ex1;
 
 import homework3.ex3.Group;
 
+import static java.util.Objects.requireNonNull;
+
 public class DepartmentController {
     private DepartmentDAO departmentDAO;
     private Department department;
 
     public DepartmentController(DepartmentDAO departmentDAO) {
-        checkArgs(departmentDAO);
-        this.departmentDAO = departmentDAO;
-    }
-
-    private void checkArgs(DepartmentDAO departmentDAO) {
-
+        this.departmentDAO = requireNonNull(departmentDAO);
     }
 
     public void add(Group group) {
-
+        department.add(group);
     }
 
     public void save() {

@@ -1,6 +1,8 @@
 package homework3.ex1;
 
-public class Human {
+import java.io.Serializable;
+
+public class Human implements Serializable {
     protected String firstName;
     protected String middleName;
     protected String lastName;

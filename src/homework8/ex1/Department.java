@@ -37,6 +37,10 @@ public class Department implements Serializable {
         return null;
     }
 
+    public List<Group> getAll() {
+        return groups;
+    }
+
     public String getName() {
         return name;
     }

@@ -2,9 +2,7 @@ package homework3.ex2;
 
 import homework3.ex1.Human;
 
-import java.io.Serializable;
-
-public class Student extends Human implements Comparable, Serializable {
+public class Student extends Human implements Comparable {
     public Student(String firstName, String middleName, String lastName,
                    int age, boolean sex) {
 
