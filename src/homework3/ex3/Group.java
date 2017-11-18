@@ -4,10 +4,13 @@ import homework3.ex2.Student;
 
 import javax.swing.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Group implements Voenkom, Serializable {
+
 
     public enum SortField {
         LASTNAME, FIRSTNAME, MIDDLENAME, AGE, SEX
@@ -29,8 +32,7 @@ public class Group implements Voenkom, Serializable {
 
     private static final int MAX_CAPACITY = 10;
 
-    private Student[] students;
-    private int currentPosition;
+    private List<Student> students;
     private String name;
 
     public Group() {
@@ -38,7 +40,7 @@ public class Group implements Voenkom, Serializable {
     }
 
     public Group(String name) {
-        students = new Student[MAX_CAPACITY];
+        students = new ArrayList<>(MAX_CAPACITY);
         this.name = name;
     }
 
@@ -90,29 +92,19 @@ public class Group implements Voenkom, Serializable {
         if (student == null) {
             throw new IllegalArgumentException("argument is null");
         }
-        try {
-            students[currentPosition++] = student;
-        } catch (IndexOutOfBoundsException e) {
+        if (students.size() == MAX_CAPACITY) {
             throw new GroupFullException();
         }
+
+        students.add(student);
     }
 
     public void deleteStudent(Student student) {
         if (student == null) {
             throw new IllegalArgumentException("argument is null");
         }
-        for (int i = 0; i < currentPosition; i++) {
-            if (students[i].equals(student)) {
-                // копируем хвост массива на место удаляемого элемента
-                if (i != (currentPosition - 1)) {
-                    System.arraycopy(students, i + 1, students, i,
-                            currentPosition - i);
-                }
-                currentPosition -= 1;
-                students[currentPosition] = null;
-                break;
-            }
-        }
+
+        students.remove(student);
     }
 
     public Student findStudentByLastName(String lastName) {
@@ -120,39 +112,25 @@ public class Group implements Voenkom, Serializable {
             throw new IllegalArgumentException("argument is null");
         }
 
-        Student result = null;
-        for (int i = 0; i < currentPosition; i++) {
-            if (students[i].getLastName().equals(lastName)) {
-                result = students[i];
-                break;
-            }
-        }
-        return result;
+        return students.stream()
+                .filter(s -> s.getLastName().equals(lastName))
+                .findFirst()
+                .orElse(null);
     }
 
     private Student[] sortStudentsByLastName() {
-        Student[] result = new Student[currentPosition];
-
-        if (currentPosition > 0) {
-            System.arraycopy(students, 0, result, 0, currentPosition);
-            Arrays.sort(result);
-        }
+        Student[] result = students.toArray(new Student[0]);
+        Arrays.sort(result);
 
         return result;
     }
 
     public int getNumberOfStudents() {
-        return currentPosition;
+        return students.size();
     }
 
     public Student[] getStudents() {
-        Student[] result = new Student[currentPosition];
-
-        if (currentPosition > 0) {
-            System.arraycopy(students, 0, result, 0, currentPosition);
-        }
-
-        return result;
+        return students.toArray(new Student[0]);
     }
 
     @Override
@@ -174,34 +152,31 @@ public class Group implements Voenkom, Serializable {
 
         switch (field) {
             case LASTNAME: {
-                Arrays.sort(students, 0, currentPosition,
-                        (a, b) -> a.getLastName()
-                                .compareToIgnoreCase(b.getLastName())
-                                * order.getOrder());
+                students.sort((a, b) -> a.getLastName()
+                        .compareToIgnoreCase(b.getLastName())
+                        * order.getOrder());
                 break;
             }
             case FIRSTNAME: {
-                Arrays.sort(students, 0, currentPosition,
-                        (a, b) -> a.getFirstName()
-                                .compareToIgnoreCase(b.getFirstName())
-                                * order.getOrder());
+                students.sort((a, b) -> a.getFirstName()
+                        .compareToIgnoreCase(b.getFirstName())
+                        * order.getOrder());
                 break;
             }
             case MIDDLENAME: {
-                Arrays.sort(students, 0, currentPosition,
-                        (a, b) -> a.getMiddleName()
-                                .compareToIgnoreCase(b.getMiddleName())
-                                * order.getOrder());
+                students.sort((a, b) -> a.getMiddleName()
+                        .compareToIgnoreCase(b.getMiddleName())
+                        * order.getOrder());
                 break;
             }
             case AGE: {
-                Arrays.sort(students, 0, currentPosition,
-                        (a, b) -> (a.getAge() - b.getAge()) * order.getOrder());
+                students.sort((a, b) -> (a.getAge() - b.getAge())
+                        * order.getOrder());
                 break;
             }
             case SEX: {
-                Arrays.sort(students, 0, currentPosition,
-                        (a, b) -> ((!a.isSex() ? 0 : 1) - (!b.isSex() ? 0 : 1))
+                students.sort((a, b) ->
+                        ((!a.isSex() ? 0 : 1) - (!b.isSex() ? 0 : 1))
                                 * order.getOrder());
                 break;
             }
@@ -210,22 +185,10 @@ public class Group implements Voenkom, Serializable {
 
     @Override
     public Student[] getConscripts() {
-        int size = 0;
-        for (int i = 0; i < currentPosition; i++) {
-            if (students[i].isSex() && students[i].getAge() > 18) {
-                size += 1;
-            }
-        }
+        return students.stream()
+                .filter(s -> s.isSex() && s.getAge() > 18)
+                .toArray(Student[]::new);
 
-        int index = 0;
-        Student[] conscripts = new Student[size];
-        for (int i = 0; i < currentPosition; i++) {
-            if (students[i].isSex() && students[i].getAge() > 18) {
-                conscripts[index++] = students[i];
-            }
-        }
-
-        return conscripts;
     }
 
     @Override
