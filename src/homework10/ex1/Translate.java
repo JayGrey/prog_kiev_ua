@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Translate {
     private final Dictionary dictionary;
@@ -14,37 +16,24 @@ public class Translate {
 
     public void process(String originalFile, String translatedFile) {
         checkArgs(originalFile, translatedFile);
+
+        Pattern pattern = Pattern.compile("\\w+");
+
         try (BufferedReader reader = new BufferedReader(new FileReader
                 (originalFile));
              FileWriter writer = new FileWriter(translatedFile)) {
             while (reader.ready()) {
-                String str = reader.readLine();
+                String input = reader.readLine();
+                Matcher matcher = pattern.matcher(input);
                 int begin = 0;
-                int end = 0;
-                int i = 0;
-                while (i < str.length()) {
-                    char ch = str.charAt(i);
-                    if (Character.isAlphabetic(ch)) {
-                        if (begin != i) {
-                            writer.write(str.substring(end, i));
-                        }
-
-                        begin = i;
-                        end = i;
-                        while (end < str.length() && Character.isAlphabetic(str
-                                .charAt(end))) {
-                            end++;
-                        }
-                        writer.write(dictionary.get(str.substring(begin, end)));
-                        i = end + 1;
-                    } else {
-                        i += 1;
-                    }
+                while (matcher.find()) {
+                    writer.write(input.substring(begin, matcher.start()));
+                    String translated = dictionary.get(matcher.group());
+                    writer.write(translated.length() == 0
+                            ? matcher.group() : translated);
+                    begin = matcher.end();
                 }
-                if (end < str.length()) {
-                    writer.write(str.substring(end));
-                }
-                writer.write(System.lineSeparator());
+                writer.write(input.substring(begin));
             }
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);

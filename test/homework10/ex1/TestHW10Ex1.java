@@ -188,7 +188,7 @@ public class TestHW10Ex1 {
         translate.process(fileIn.getCanonicalPath(),
                 fileOut.getCanonicalPath());
 
-        assertEquals("b , d.", readFromFile(fileOut));
+        assertEquals("b e, d.", readFromFile(fileOut));
     }
 
     private void writeToFile(File fileIn, String s) throws IOException {
