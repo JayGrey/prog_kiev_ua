@@ -179,30 +179,12 @@ public class TestHW10Ex1 {
         dict.put("a", "b");
         dict.put("c", "d");
 
-        File fileIn = tempDir.newFile();
-        writeToFile(fileIn, "A e, c.");
-
-        File fileOut = tempDir.newFile();
-
         Translate translate = new Translate(dict);
-        translate.process(fileIn.getCanonicalPath(),
-                fileOut.getCanonicalPath());
 
-        assertEquals("b e, d.", readFromFile(fileOut));
+        assertEquals("b e, d.", translate.process("a e, c."));
+        assertEquals(" b e, d.", translate.process(" a e, c."));
+        assertEquals("b e, d. ", translate.process("a e, c. "));
     }
 
-    private void writeToFile(File fileIn, String s) throws IOException {
-        try (PrintWriter writer = new PrintWriter(fileIn)) {
-            writer.println(s);
-        }
-    }
 
-    private String readFromFile(File fileOut) throws IOException {
-        String result = "";
-        try (BufferedReader reader = new BufferedReader(new FileReader
-                (fileOut))) {
-            result = reader.readLine();
-        }
-        return result;
-    }
 }

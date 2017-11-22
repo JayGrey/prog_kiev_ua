@@ -43,7 +43,8 @@ public class Dictionary {
 
     public void load(String fileName) {
         if (fileName == null || !new File(fileName).isFile()) {
-            throw new IllegalArgumentException();
+            System.err.format("warning: file [%s] not found%n", fileName);
+            return;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader
