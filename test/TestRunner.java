@@ -8,8 +8,7 @@ public class TestRunner {
         System.out.format("run %d test(s) in %d ms%n", result.getRunCount(),
                 result.getRunTime());
         if (!result.wasSuccessful()) {
-            System.out.format("failed: %d%n", result.getFailureCount());
-            System.out.println();
+            System.out.format("failed: %d%n%n", result.getFailureCount());
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure);
             }
