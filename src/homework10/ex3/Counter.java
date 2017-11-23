@@ -12,7 +12,9 @@ public class Counter {
         Map<T, Integer> result = new HashMap<>();
 
         for (T t : array) {
-            result.put(t, result.getOrDefault(t, 0) + 1);
+            if (t != null) {
+                result.put(t, result.getOrDefault(t, 0) + 1);
+            }
         }
 
         return result;

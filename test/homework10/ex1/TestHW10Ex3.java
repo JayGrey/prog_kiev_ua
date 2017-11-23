@@ -35,4 +35,11 @@ public class TestHW10Ex3 {
         assertEquals(3, result.size());
         assertEquals(2, (int) result.get("0"));
     }
+
+    @Test
+    public void testNullValues() {
+        Map<String, Integer> result = Counter.countFrequency(
+                new String[]{null, null});
+        assertEquals(0, result.size());
+    }
 }
