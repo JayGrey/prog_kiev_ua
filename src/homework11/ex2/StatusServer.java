@@ -36,14 +36,6 @@ public class StatusServer {
         }
     }
 
-    private synchronized String getInfo() {
-        OperatingSystemMXBean bean =
-                ManagementFactory.getOperatingSystemMXBean();
-        return String.format("request: %s%nos: %s %s, %s%n",
-                request.incrementAndGet(), bean.getName(), bean.getVersion(),
-                bean.getArch());
-    }
-
     private class Worker implements Runnable {
 
         private final Socket socket;
@@ -71,5 +63,14 @@ public class StatusServer {
                 }
             }
         }
+
+        private String getInfo() {
+            OperatingSystemMXBean bean =
+                    ManagementFactory.getOperatingSystemMXBean();
+            return String.format("request: %s%nos: %s %s, %s%n",
+                    request.incrementAndGet(), bean.getName(), bean.getVersion(),
+                    bean.getArch());
+        }
+
     }
 }
