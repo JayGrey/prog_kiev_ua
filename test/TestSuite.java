@@ -1,4 +1,4 @@
-import homework11.ex1.TestHW11Ex1;
+import homework11.TestHW11Ex2;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -26,8 +26,9 @@ import org.junit.runners.Suite;
         TestHW8Ex3.class,
         TestHW10Ex1.class,
         TestHW10Ex3.class,
-        TestHW10Ex4.class,*/
-        TestHW11Ex1.class,
+        TestHW10Ex4.class,
+        TestHW11Ex1.class,*/
+        TestHW11Ex2.class,
 
 })
 public class TestSuite {

@@ -1,4 +1,4 @@
-package homework10.ex1;
+package homework10;
 
 import homework10.ex4.CharacterMatrixEnglish;
 import homework10.ex4.Translator;

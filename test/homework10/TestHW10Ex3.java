@@ -1,4 +1,4 @@
-package homework10.ex1;
+package homework10;
 
 import homework10.ex3.Counter;
 import org.junit.Test;

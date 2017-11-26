@@ -1,5 +1,7 @@
-package homework10.ex1;
+package homework10;
 
+import homework10.ex1.Dictionary;
+import homework10.ex1.Translate;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
