@@ -1,28 +1,10 @@
-import homework10.ex1.TestHW10Ex1;
-import homework10.ex1.TestHW10Ex3;
-import homework10.ex1.TestHW10Ex4;
-import homework3.TestHW3Ex2;
-import homework3.TestHW3Ex3;
-import homework4.TestHW4Ex1;
-import homework4.TestHW4Ex2;
-import homework4.TestHW4Ex3;
-import homework4.TestHW4Ex4;
-import homework5.TestHW5Ex1;
-import homework5.TestHW5Ex2;
-import homework5.TestHW5Ex3;
-import homework5.TestHW5Ex4;
-import homework6.*;
-import homework7.TestHW7Ex2;
-import homework7.TestHW7Ex3;
-import homework8.TestHW8Ex1;
-import homework8.TestHW8Ex2;
-import homework8.TestHW8Ex3;
+import homework11.ex1.TestHW11Ex1;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestHW3Ex2.class,
+        /*TestHW3Ex2.class,
         TestHW3Ex3.class,
         TestHW4Ex1.class,
         TestHW4Ex2.class,
@@ -44,7 +26,8 @@ import org.junit.runners.Suite;
         TestHW8Ex3.class,
         TestHW10Ex1.class,
         TestHW10Ex3.class,
-        TestHW10Ex4.class,
+        TestHW10Ex4.class,*/
+        TestHW11Ex1.class,
 
 })
 public class TestSuite {
