@@ -10,12 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FindStudentAction implements Action {
-    private final GroupController group;
+public class FindStudentAction extends BaseAction {
     private Template template;
 
     public FindStudentAction(GroupController group) {
-        this.group = group;
+        super(group);
         this.template = Template.getInstance();
     }
 
@@ -32,23 +31,5 @@ public class FindStudentAction implements Action {
 
         return new Response(Response.StatusCode._200,
                 template.renderPage("find_student", params));
-    }
-
-    private String formTable(List<Student> students) {
-        StringBuilder result = new StringBuilder();
-        for (Student student : students) {
-            result.append("<tr>").append(System.lineSeparator());
-            result.append("<td>").append(student.getLastName()).append("</td>");
-            result.append("<td>").append(student.getFirstName()).append
-                    ("</td>");
-            result.append("<td>").append(student.getMiddleName()).append
-                    ("</td>");
-            result.append("<td>").append(student.getAge()).append("</td>");
-            result.append("<td>").append(student.isSex() ? "male" : "female")
-                    .append("</td>");
-            result.append("</tr>").append(System.lineSeparator());
-        }
-
-        return result.toString();
     }
 }

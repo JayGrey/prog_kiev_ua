@@ -8,15 +8,14 @@ import homework11.ex4.Template;
 import homework3.ex2.Student;
 import homework5.ex3.GroupController;
 
-public class AddStudentAction implements Action {
+public class AddStudentAction extends BaseAction {
 
     private final Template template;
-    private final GroupController group;
     private final Dispatcher dispatcher;
 
     public AddStudentAction(GroupController group) {
+        super(group);
         this.template = Template.getInstance();
-        this.group = group;
         this.dispatcher = Dispatcher.getInstance();
     }
 

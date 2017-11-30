@@ -7,15 +7,14 @@ import homework11.ex4.Response;
 import homework11.ex4.Template;
 import homework5.ex3.GroupController;
 
-public class ChangeNameAction implements Action {
+public class ChangeNameAction extends BaseAction {
 
     private final Template template;
-    private final GroupController group;
     private Dispatcher dispatcher;
 
     public ChangeNameAction(GroupController group) {
+        super(group);
         this.template = Template.getInstance();
-        this.group = group;
         this.dispatcher = Dispatcher.getInstance();
     }
 

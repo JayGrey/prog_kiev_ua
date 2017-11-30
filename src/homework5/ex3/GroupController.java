@@ -3,6 +3,7 @@ package homework5.ex3;
 import homework3.ex2.Student;
 import homework3.ex3.Group;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GroupController {
@@ -32,6 +33,10 @@ public class GroupController {
 
     public List<Student> findAllByLastName(String lastName) {
         return group.findAllByLastName(lastName);
+    }
+
+    public List<Student> getConscripts() {
+        return Arrays.asList(group.getConscripts());
     }
 
     public Student[] getAllStudents() {

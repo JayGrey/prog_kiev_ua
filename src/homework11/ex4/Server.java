@@ -58,6 +58,7 @@ public class Server {
         template.loadPage("add_student", "templates/add_student.tmpl");
         template.loadPage("delete_student", "templates/delete_student.tmpl");
         template.loadPage("find_student", "templates/find_student.tmpl");
+        template.loadPage("find_conscripts", "templates/conscripts.tmpl");
         template.loadPage("page_not_found", "templates/404.tmpl");
     }
 
@@ -67,6 +68,7 @@ public class Server {
         dispatcher.map("/add_student", new AddStudentAction(group));
         dispatcher.map("/delete_student", new RemoveStudentAction(group));
         dispatcher.map("/find_student", new FindStudentAction(group));
+        dispatcher.map("/find_conscripts", new FindConscriptsAction(group));
     }
 
     private class WebWorker implements Runnable {

@@ -11,14 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class RemoveStudentAction implements Action {
+public class RemoveStudentAction extends BaseAction {
 
     private final Template template;
-    private final GroupController group;
     private final Dispatcher dispatcher;
 
     public RemoveStudentAction(GroupController group) {
-        this.group = group;
+        super(group);
         this.template = Template.getInstance();
         this.dispatcher = Dispatcher.getInstance();
     }
