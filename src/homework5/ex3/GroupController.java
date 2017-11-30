@@ -3,6 +3,8 @@ package homework5.ex3;
 import homework3.ex2.Student;
 import homework3.ex3.Group;
 
+import java.util.List;
+
 public class GroupController {
     private GroupDAO groupDAO;
     private Group group;
@@ -26,6 +28,10 @@ public class GroupController {
 
     public void delete(int id) {
         group.deleteStudent(id);
+    }
+
+    public List<Student> findAllByLastName(String lastName) {
+        return group.findAllByLastName(lastName);
     }
 
     public Student[] getAllStudents() {

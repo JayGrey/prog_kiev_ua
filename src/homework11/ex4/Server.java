@@ -1,9 +1,6 @@
 package homework11.ex4;
 
-import homework11.ex4.actions.AddStudentAction;
-import homework11.ex4.actions.ChangeNameAction;
-import homework11.ex4.actions.IndexAction;
-import homework11.ex4.actions.RemoveStudentAction;
+import homework11.ex4.actions.*;
 import homework5.ex3.GroupController;
 import homework5.ex3.GroupDAOImpl;
 
@@ -60,6 +57,7 @@ public class Server {
         template.loadPage("change_name", "templates/change_group_name.tmpl");
         template.loadPage("add_student", "templates/add_student.tmpl");
         template.loadPage("delete_student", "templates/delete_student.tmpl");
+        template.loadPage("find_student", "templates/find_student.tmpl");
         template.loadPage("page_not_found", "templates/404.tmpl");
     }
 
@@ -68,6 +66,7 @@ public class Server {
         dispatcher.map("/change_name", new ChangeNameAction(group));
         dispatcher.map("/add_student", new AddStudentAction(group));
         dispatcher.map("/delete_student", new RemoveStudentAction(group));
+        dispatcher.map("/find_student", new FindStudentAction(group));
     }
 
     private class WebWorker implements Runnable {

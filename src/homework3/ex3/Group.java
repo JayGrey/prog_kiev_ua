@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Group implements Voenkom, Serializable {
 
@@ -124,6 +125,17 @@ public class Group implements Voenkom, Serializable {
                 .findFirst()
                 .orElse(null);
     }
+
+    public List<Student> findAllByLastName(String lastName) {
+        if (lastName == null) {
+            throw new IllegalArgumentException("argument is null");
+        }
+
+        return students.stream()
+                .filter(s -> s.getLastName().contains(lastName))
+                .collect(Collectors.toList());
+    }
+
 
     private Student[] sortStudentsByLastName() {
         Student[] result = students.toArray(new Student[0]);

@@ -76,7 +76,7 @@ public class Request {
                 }
 
                 // path
-                path = elements[1].trim();
+                path = parsePath(elements[1].trim());
 
                 // protocol
                 protocol = elements[2].trim();
@@ -92,6 +92,22 @@ public class Request {
         }
     }
 
+    private String parsePath(String path) {
+        if (path.contains("?")) {
+            int index = path.indexOf('?');
+            String params = decode(path.substring(index + 1));
+            for (String param : params.split("&")) {
+                String[] elements = param.split("=");
+                if (elements.length == 2) {
+                    body.put(elements[0].trim().toLowerCase(),
+                            elements[1].trim());
+                }
+            }
+            path = path.substring(0, index);
+        }
+        return path;
+    }
+
     private void parseBody(String s) {
         if (headers.containsKey("content-type")) {
             if (!headers.get("content-type")
@@ -105,7 +121,6 @@ public class Request {
                         decode(element.substring(index + 1)));
             }
         }
-        System.out.println("body: " + body);
     }
 
     String decode(String param) {
