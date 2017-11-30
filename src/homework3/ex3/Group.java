@@ -28,11 +28,13 @@ public class Group implements Voenkom, Serializable {
         public int getOrder() {
             return order;
         }
+
     }
 
     private static final int MAX_CAPACITY = 10;
 
     private List<Student> students;
+
     private String name;
 
     public Group() {
@@ -53,6 +55,7 @@ public class Group implements Voenkom, Serializable {
     }
 
     // interactive
+
     public void addStudent() {
         while (true) {
             try {
@@ -105,6 +108,10 @@ public class Group implements Voenkom, Serializable {
         }
 
         students.remove(student);
+    }
+
+    public void deleteStudent(int id) {
+        students.removeIf(s -> (s.getId() == id));
     }
 
     public Student findStudentByLastName(String lastName) {

@@ -3,6 +3,10 @@ package homework3.ex2;
 import homework3.ex1.Human;
 
 public class Student extends Human implements Comparable {
+
+    private static int counter = 0;
+    private final int id = counter++;
+
     public Student(String firstName, String middleName, String lastName,
                    int age, boolean sex) {
 
@@ -48,5 +52,9 @@ public class Student extends Human implements Comparable {
     public int compareTo(Object o) {
         Student other = (Student) o;
         return lastName.compareToIgnoreCase(other.lastName);
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -32,6 +32,8 @@ public class RemoveStudentAction implements Action {
             result = new Response(Response.StatusCode._200,
                     template.renderPage("delete_student", params));
         } else if (request.getMethod() == Request.Method.POST) {
+            int id = Integer.valueOf(request.getBody().get("student"));
+            group.delete(id);
             result = dispatcher.forward("/", request);
         }
         return result;
@@ -40,12 +42,15 @@ public class RemoveStudentAction implements Action {
     private String formComboBox() {
         StringBuilder sb = new StringBuilder();
         if (group.getAllStudents().length > 0) {
-            sb.append("<select name=\"name\">").append(System.lineSeparator());
+            sb.append("<select name=\"student\">");
             for (Student student : group.getAllStudents()) {
-                sb.append("<option value=\"student\">")
-                        .append(String.format("%s %s %s", student.getLastName(),
-                                student.getFirstName(), student.getMiddleName
-                                        ())).append("</option>");
+                sb.append(String.format("<option value=\"%s\">%s %s " +
+                                "%s</option>",
+                        student.getId(),
+                        student.getLastName(),
+                        student.getFirstName(),
+                        student.getMiddleName())
+                );
             }
             sb.append("</select>").append(System.lineSeparator());
         }

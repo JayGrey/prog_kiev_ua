@@ -24,6 +24,10 @@ public class GroupController {
         group.addStudent(student);
     }
 
+    public void delete(int id) {
+        group.deleteStudent(id);
+    }
+
     public Student[] getAllStudents() {
         return group.getStudents();
     }
