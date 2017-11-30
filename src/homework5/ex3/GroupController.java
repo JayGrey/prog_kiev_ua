@@ -39,6 +39,10 @@ public class GroupController {
         return Arrays.asList(group.getConscripts());
     }
 
+    public void sort(Group.SortField field, Group.SortOrder order) {
+        group.sortStudentsBy(field, order);
+    }
+
     public Student[] getAllStudents() {
         return group.getStudents();
     }
