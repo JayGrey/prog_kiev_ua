@@ -16,15 +16,11 @@ public class Request {
     private Map<String, String> headers = new HashMap<>();
     private Map<String, String> body = new HashMap<>();
 
-    public Request(InputStream stream) {
-
-        read(stream);
+    public Request() {
     }
 
-    public void read(InputStream stream) {
-
+    public Request read(InputStream stream) {
         try {
-
             BufferedInputStream reader = new BufferedInputStream(stream);
 
             ByteArrayOutputStream requestHeader =
@@ -52,8 +48,10 @@ public class Request {
                 }
             }
         } catch (IOException e) {
-            throw new InternalServerError(e);
+            throw new InternalServerException(e);
         }
+
+        return this;
     }
 
     private void parseHeader(String inputString) {
@@ -103,11 +101,32 @@ public class Request {
 
             for (String element : s.split("&")) {
                 int index = element.indexOf('=');
-                body.put(element.substring(0, index).replace('+', ' '),
-                        element.substring(index + 1).replace('+', ' '));
+                body.put(decode(element.substring(0, index)),
+                        decode(element.substring(index + 1)));
             }
         }
         System.out.println("body: " + body);
+    }
+
+    String decode(String param) {
+        if (param == null) {
+            return null;
+        }
+
+        param = param.replace('+', ' ');
+
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        for (int i = 0; i < param.length(); ) {
+            if (param.charAt(i) == '%') {
+                result.write(
+                        Integer.valueOf(param.substring(i + 1, i + 3), 16));
+                i += 3;
+            } else {
+                result.write(param.charAt(i++));
+            }
+        }
+
+        return result.toString();
     }
 
 
@@ -125,6 +144,10 @@ public class Request {
 
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    public Map<String, String> getBody() {
+        return body;
     }
 
     @Override

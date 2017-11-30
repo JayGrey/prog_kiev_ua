@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add new student</title>
+</head>
+<body>
+<main>
+    <p>Add new student:</p>
+    
+    <form method="post" action="/add_student">
+        <table>
+            <tr>
+                <td>Last name:</td>
+                <td><input type="text" name="lastname"/></td>
+            </tr>
+            <tr>
+                <td>First name:</td>
+                <td><input type="text" name="firstname"/></td>
+            </tr>
+            <tr>
+                <td>Middle name:</td>
+                <td><input type="text" name="middlename"/></td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td><input type="number" name="age" min="1" max="100"></td>
+            </tr>
+            <tr>
+                <td>Sex:</td>
+                <td>
+                    Male<input type="radio" name="sex" value="male" checked>
+                    Female<input type="radio" name="sex" value="female">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Save"/>
+    </form>
+    <a href="/">Back</a>
+</main>
+</body>
+</html>

@@ -4,15 +4,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Template {
+public final class Template {
+
+    private static Template instance = null;
 
     private Map<String, String> templates;
 
-    public Template() {
+    private Template() {
         templates = new HashMap<>();
+    }
+
+    public static Template getInstance() {
+        if (instance == null) {
+            instance = new Template();
+        }
+
+        return instance;
     }
 
     public void loadPage(String templateName, String fileName) {
@@ -37,6 +48,17 @@ public class Template {
     }
 
     public String renderPage(String name) {
-        return templates.get(name);
+        return renderPage(name, Collections.emptyMap());
+    }
+
+    public String renderPage(String name, Map<String, String> params) {
+        String result = templates.get(name);
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (result.contains("{" + entry.getKey() + "}")) {
+                result = result.replace("{" + entry.getKey() + "}",
+                        entry.getValue());
+            }
+        }
+        return result;
     }
 }

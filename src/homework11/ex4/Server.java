@@ -1,5 +1,12 @@
 package homework11.ex4;
 
+import homework11.ex4.actions.AddStudentAction;
+import homework11.ex4.actions.ChangeNameAction;
+import homework11.ex4.actions.IndexAction;
+import homework11.ex4.actions.RemoveStudentAction;
+import homework5.ex3.GroupController;
+import homework5.ex3.GroupDAOImpl;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +17,10 @@ public class Server {
 
     private final int port;
     private final ExecutorService pool;
-    private Template template;
+    private final Template template;
+    private final Dispatcher dispatcher;
+    private final GroupController group;
+
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -24,12 +34,15 @@ public class Server {
     public Server(int port) {
         this.port = port;
         pool = Executors.newFixedThreadPool(4);
-        template = new Template();
+        template = Template.getInstance();
+        dispatcher = Dispatcher.getInstance();
+        group = new GroupController(new GroupDAOImpl("group.json"));
     }
 
     private void start() {
         System.out.println("Start web server on port " + port);
         loadTemplates();
+        bindActions();
         try {
             ServerSocket socket = new ServerSocket(port);
             while (true) {
@@ -43,9 +56,18 @@ public class Server {
     }
 
     private void loadTemplates() {
-        template.loadPage("index", "index.tmpl");
-        template.loadPage("page_not_found", "404.tmpl");
-        template.loadPage("change_name", "change_group_name.tmpl");
+        template.loadPage("index", "templates/index.tmpl");
+        template.loadPage("change_name", "templates/change_group_name.tmpl");
+        template.loadPage("add_student", "templates/add_student.tmpl");
+        template.loadPage("delete_student", "templates/delete_student.tmpl");
+        template.loadPage("page_not_found", "templates/404.tmpl");
+    }
+
+    private void bindActions() {
+        dispatcher.map("/", new IndexAction(group));
+        dispatcher.map("/change_name", new ChangeNameAction(group));
+        dispatcher.map("/add_student", new AddStudentAction(group));
+        dispatcher.map("/delete_student", new RemoveStudentAction(group));
     }
 
     private class WebWorker implements Runnable {
@@ -61,13 +83,11 @@ public class Server {
         @Override
         public void run() {
             try {
-                Request request = new Request(socket.getInputStream());
-                Response response = dispatchRequest(request);
+                Request request = new Request().read(socket.getInputStream());
+                Response response = dispatcher.dispatch(request);
                 response.write(socket.getOutputStream());
-
-                System.out.println("end processing client");
                 socket.close();
-            } catch (InternalServerError | UnsupportedMediaTypeException
+            } catch (InternalServerException | UnsupportedMediaTypeException
                     | IOException e) {
                 Response response =
                         new Response(Response.StatusCode._500, "error");
@@ -77,38 +97,6 @@ public class Server {
                     e1.printStackTrace();
                 }
             }
-
-        }
-
-        private Response dispatchRequest(Request request) {
-            Response result = new Response(Response.StatusCode._404,
-                    template.renderPage("page_not_found"));
-            if (request == null) {
-                return result;
-            }
-
-            System.out.println(request);
-
-            switch (request.getPath()) {
-                case "/": {
-                    result = new Response(Response.StatusCode._200,
-                            template.renderPage("index"));
-                    break;
-                }
-
-                case "/change_name": {
-                    if (request.getMethod() == Request.Method.GET) {
-                        result = new Response(Response.StatusCode._200,
-                                template.renderPage("change_name"));
-                    } else if (request.getMethod() == Request.Method.POST) {
-                        result = new Response(Response.StatusCode._200,
-                                template.renderPage("index"));
-                    }
-                    break;
-                }
-            }
-
-            return result;
         }
     }
 }
