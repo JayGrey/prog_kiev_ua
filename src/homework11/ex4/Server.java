@@ -1,6 +1,10 @@
 package homework11.ex4;
 
 import homework11.ex4.actions.*;
+import homework11.ex4.exceptions.InternalServerException;
+import homework11.ex4.exceptions.PageNotFoundException;
+import homework11.ex4.exceptions.UnsupportedMediaTypeException;
+import homework11.ex4.exceptions.WebServerException;
 import homework5.ex3.GroupController;
 import homework5.ex3.GroupDAOImpl;
 
@@ -38,15 +42,15 @@ public class Server {
 
     private void start() {
         System.out.println("Start web server on port " + port);
-        loadTemplates();
-        bindActions();
         try {
+            loadTemplates();
+            bindActions();
             ServerSocket socket = new ServerSocket(port);
             while (true) {
                 pool.submit(new WebWorker(socket.accept()));
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (WebServerException | IOException e) {
+            e.printStackTrace(System.err);
         } finally {
             pool.shutdown();
         }
@@ -88,15 +92,8 @@ public class Server {
                 Response response = dispatcher.dispatch(request);
                 response.write(socket.getOutputStream());
                 socket.close();
-            } catch (InternalServerException | UnsupportedMediaTypeException
-                    | IOException e) {
-                Response response =
-                        new Response(Response.StatusCode._500, "error");
-                try {
-                    response.write(socket.getOutputStream());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+            } catch (IOException e) {
+                throw new InternalServerException(e);
             }
         }
     }

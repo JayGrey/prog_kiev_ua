@@ -1,5 +1,8 @@
 package homework11.ex4;
 
+import homework11.ex4.exceptions.InternalServerException;
+import homework11.ex4.exceptions.UnsupportedMediaTypeException;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -112,7 +115,8 @@ public class Request {
         if (headers.containsKey("content-type")) {
             if (!headers.get("content-type")
                     .equalsIgnoreCase("application/x-www-form-urlencoded")) {
-                throw new UnsupportedMediaTypeException();
+                throw new UnsupportedMediaTypeException("unsupported content " +
+                        "type: " + headers.get("content-type"));
             }
 
             for (String element : s.split("&")) {

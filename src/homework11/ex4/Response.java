@@ -56,7 +56,7 @@ public class Response {
         if (stream == null) {
             return;
         }
-
+        //todo: rewrite form headers
         PrintWriter writer = new PrintWriter(stream);
         String output = String.format("HTTP/1.1 %d %s\r\n" +
                         "Content-Type: text/html; charset=UTF-8\r\n\r\n%s",

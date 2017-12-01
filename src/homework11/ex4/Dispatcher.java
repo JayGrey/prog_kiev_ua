@@ -1,6 +1,8 @@
 package homework11.ex4;
 
 import homework11.ex4.actions.Action;
+import homework11.ex4.exceptions.InternalServerException;
+import homework11.ex4.exceptions.PageNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,7 @@ public final class Dispatcher {
 
     public void map(String path, Action action) {
         if (path == null || action == null) {
-            return;
+            throw new InternalServerException("illegal parameters");
         }
 
         actions.put(path, action);
@@ -38,15 +40,18 @@ public final class Dispatcher {
         Action action = actions.get(request.getPath());
 
         if (action == null) {
-            return new Response(Response.StatusCode._404,
-                    template.renderPage("page_not_found"));
+            throw new PageNotFoundException(request.getPath());
         }
 
         return action.process(request);
     }
 
     public Response forward(String path, Request request) {
-        return actions.get(path).process(request);
+        Action action = actions.get(path);
+        if (action == null) {
+            throw new PageNotFoundException(path);
+        }
+        return action.process(request);
     }
 }
 
