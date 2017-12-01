@@ -2,8 +2,6 @@ package homework11.ex4;
 
 import homework11.ex4.actions.*;
 import homework11.ex4.exceptions.InternalServerException;
-import homework11.ex4.exceptions.PageNotFoundException;
-import homework11.ex4.exceptions.UnsupportedMediaTypeException;
 import homework11.ex4.exceptions.WebServerException;
 import homework5.ex3.GroupController;
 import homework5.ex3.GroupDAOImpl;
