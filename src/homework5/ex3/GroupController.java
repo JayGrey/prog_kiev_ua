@@ -23,11 +23,11 @@ public class GroupController {
         group = groupDAO.loadGroup(groupName);
     }
 
-    public void add(Student student) {
+    public synchronized void add(Student student) {
         group.addStudent(student);
     }
 
-    public void delete(int id) {
+    public synchronized void delete(int id) {
         group.deleteStudent(id);
     }
 
@@ -39,7 +39,8 @@ public class GroupController {
         return Arrays.asList(group.getConscripts());
     }
 
-    public void sort(Group.SortField field, Group.SortOrder order) {
+    public synchronized void sort(Group.SortField field, Group.SortOrder
+            order) {
         group.sortStudentsBy(field, order);
     }
 
@@ -47,7 +48,7 @@ public class GroupController {
         return group.getStudents();
     }
 
-    public void setName(String name) {
+    public synchronized void setName(String name) {
         group.setName(name);
     }
 
